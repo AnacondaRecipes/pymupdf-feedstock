@@ -43,7 +43,8 @@ test:
 
 about:
   home: https://github.com/pymupdf/PyMuPDF
-  license: COPYING
+  license: AGPL-3.0-or-later
+  license_file: COPYING
   license_family: AGPL
   summary: PyMuPDF is an enhanced Python binding for MuPDF.
   description: |
