@@ -28,11 +28,17 @@ test:
     - pip
 
 about:
-  home:
-  license:
-  license_family:
-  summary:
+  home: https://github.com/pymupdf/PyMuPDF
+  license: COPYING
+  license_family: AGPL
+  summary: PyMuPDF is an enhanced Python binding for MuPDF.
   description: |
-    TODO
-  dev_url:
-  doc_url:
+    PyMuPDF adds Python bindings and abstractions to MuPDF, a lightweight PDF, XPS,
+    and eBook viewer, renderer, and toolkit. Both PyMuPDF and MuPDF are maintained
+    and developed by Artifex Software, Inc.
+    MuPDF can access files in PDF, XPS, OpenXPS, CBZ, EPUB and FB2 (eBooks) formats,
+    and it is known for its top performance and exceptional rendering quality.
+    In addition, about 10 popular image formats can also be handle including .png, 
+    .jpg, .bmp, .tiff, etc.
+  dev_url: https://github.com/pymupdf/PyMuPDF
+  doc_url: https://pymupdf.readthedocs.io/en/latest/
