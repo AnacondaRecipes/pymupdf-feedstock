@@ -3,7 +3,7 @@
 {% set sha256 = "5ec8d5106752297529d0d68d46cfc4ce99914aabd99be843f1599a1842d63fe9" %}
 
 package:
-  name: {{ name }}
+  name: pymupdf
   version: {{ version }}
 
 source:
