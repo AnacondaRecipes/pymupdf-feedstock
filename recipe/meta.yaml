@@ -28,10 +28,16 @@ requirements:
 test:
   imports:
     - fitz
+  source_files:
+    - tests/
   commands:
     - pip check
+    - cd tests
+    - pytest -v .
   requires:
     - pip
+    - pytest
+    - fonttools
 
 about:
   home: https://github.com/pymupdf/PyMuPDF
