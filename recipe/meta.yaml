@@ -57,4 +57,4 @@ about:
     In addition, about 10 popular image formats can also be handle including .png, 
     .jpg, .bmp, .tiff, etc.
   dev_url: https://github.com/pymupdf/PyMuPDF
-  doc_url: https://pymupdf.readthedocs.io/en/latest/
+  doc_url: https://pymupdf.readthedocs.io
