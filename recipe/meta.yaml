@@ -15,8 +15,15 @@ build:
   script: {{ PYTHON }} -m pip install --no-deps --ignore-installed --no-build-isolation .
 
 requirements:
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - swig
   host:
+    - python
+    - setuptools
   run:
+    - python
 
 test:
   imports:
