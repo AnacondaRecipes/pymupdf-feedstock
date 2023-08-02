@@ -1,0 +1,38 @@
+{% set version = "" %}
+{% set name = "pymupdf" %}
+{% set sha256 = "" %}
+
+package:
+  name: {{ name }}
+  version: {{ version }}
+
+source:
+  url:
+  sha256: {{ sha256 }}
+
+build:
+  number: 0
+  skip: true  # TODO
+  script: {{ PYTHON }} -m pip install --no-deps --ignore-installed --no-build-isolation .
+
+requirements:
+  host:
+  run:
+
+test:
+  imports:
+    - pymupdf
+  commands:
+    - pip check
+  requires:
+    - pip
+
+about:
+  home:
+  license:
+  license_family:
+  summary:
+  description: |
+    TODO
+  dev_url:
+  doc_url:
