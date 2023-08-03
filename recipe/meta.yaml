@@ -12,7 +12,7 @@ source:
 
 build:
   number: 0
-  script: {{ PYTHON }} -m pip install --no-deps --ignore-installed --no-build-isolation .
+  script: {{ PYTHON }} -m pip install --no-deps --ignore-installed --no-build-isolation -vv .
 
 requirements:
   build:
