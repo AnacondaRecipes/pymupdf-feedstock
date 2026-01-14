@@ -1,0 +1,25 @@
+From 75c3c8cc849fa294c09ca82b028e3f671a8d9fbf Mon Sep 17 00:00:00 2001
+From: Ivan Iziumov <iiziumov@anaconda.com>
+Date: Mon, 12 Jan 2026 12:56:51 +0100
+Subject: [PATCH] fix linker flags
+
+---
+ pipcl.py | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/pipcl.py b/pipcl.py
+index e1cac697..bd3b0f90 100644
+--- a/pipcl.py
++++ b/pipcl.py
+@@ -1917,7 +1917,7 @@ def build_extension(
+                 '''
+     else:
+         command2 = f'''
+-                {linker_command}
++                {compiler_command}
+                     -shared
+                     {general_flags.strip()}
+                     -MD -MF {prerequisites_path}
+-- 
+2.51.0
+
