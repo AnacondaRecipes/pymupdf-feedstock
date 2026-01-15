@@ -1,0 +1,83 @@
+{% set name = "pymupdf" %}
+{% set version = "1.26.7" %}
+
+package:
+  name: {{ name|lower }}
+  version: {{ version }}
+
+source:
+  url: https://github.com/{{ name }}/{{ name }}/archive/{{ version }}.tar.gz
+  sha256: f605e11bb459c258ff04e0003c901cd70b16d3f8f172cd3d11a127debf28d3e3
+  patches:
+    - patches/0001-fix-linker-flags.patch
+
+build:
+  number: 0
+  skip: true  # [not linux]
+  script: PYMUPDF_SETUP_MUPDF_BUILD="" PYMUPDF_SETUP_MUPDF_REBUILD=0 PYMUPDF_SETUP_MUPDF_TESSERACT=0 PYMUPDF_MUPDF_LIB="$PREFIX/lib" PYMUPDF_INCLUDES="$PREFIX/include -I$PREFIX/include/mupdf -I$PREFIX/include/freetype2" {{ PYTHON }} -m pip install . -vv --no-deps --no-build-isolation
+
+requirements:
+  build:
+    - {{ stdlib('c') }}
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
+    - swig
+  host:
+    - pip
+    - python
+    - setuptools
+    - mupdf 1.27.0
+  run:
+    - python
+    - mujs
+    - mupdf
+    - libgumbo
+
+# Missing module wdev
+{% set ignore_tests = "--ignore=tests/test_release.py" %}
+
+{% set deselect_tests = "--deselect=tests/test_barcode.py::test_barcode" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_codespell.py::test_codespell" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_flake8.py::test_flake8" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_cli_out" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_open2" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_memory.py::test_4125" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_color_count" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3050" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3854" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pylint.py::test_pylint" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_spikes.py::test_spikes" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_tesseract.py::test_tesseract" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_textextract.py::test_4180" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3058" %}
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_textbox.py::test_textbox3" %}
+
+test:
+  source_files:
+    - tests
+    - pipcl.py
+  imports:
+    - fitz
+    - pymupdf
+  requires:
+    - pip
+    - pytest
+  commands:
+    - pip check 
+    - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}
+
+about:
+  home: https://github.com/pymupdf/pymupdf
+  license: AGPL-3.0-or-later
+  license_family: AGPL
+  license_file: COPYING
+  summary: A high performance Python library for data extraction, analysis, conversion & manipulation of PDF (and other) documents.
+  description: |
+    A high performance Python library for data extraction, analysis, conversion & manipulation of PDF (and other) documents.
+  doc_url: https://github.com/pymupdf/pymupdf
+  dev_url: https://github.com/pymupdf/pymupdf
+
+extra:
+  recipe-maintainers:
+    - jan-janssen
+    - moritzwilksch
