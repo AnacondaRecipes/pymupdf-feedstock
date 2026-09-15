@@ -1,13 +1,30 @@
 {% set name = "pymupdf" %}
-{% set version = "1.26.7" %}
+{% set version = "1.28.2" %}
+{% set ignore_tests = "--ignore=tests/test_release.py" %}
+{% set deselect_tests = "--deselect=tests/test_barcode.py::test_barcode" %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_codespell.py::test_codespell"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_flake8.py::test_flake8"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_general.py::test_cli_out"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_general.py::test_open2"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_memory.py::test_4125"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_pixmap.py::test_color_count"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_pixmap.py::test_3050"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_pixmap.py::test_3854"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_pylint.py::test_pylint"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_spikes.py::test_spikes"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_tesseract.py::test_tesseract"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_textextract.py::test_4180"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_pixmap.py::test_3058"' %}
+{% set deselect_tests = 'deselect_tests + " --deselect=tests/test_textbox.py::test_textbox3"' %}
 
+# Missing module wdev
 package:
   name: {{ name|lower }}
   version: {{ version }}
 
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/{{ version }}.tar.gz
-  sha256: f605e11bb459c258ff04e0003c901cd70b16d3f8f172cd3d11a127debf28d3e3
+  sha256: 23a64814bb9dce3088256c6bed981b03a163aa232a6f698180432b9a5990a891
   patches:
     - patches/0001-fix-linker-flags.patch
 
@@ -33,25 +50,6 @@ requirements:
     - mupdf
     - libgumbo
 
-# Missing module wdev
-{% set ignore_tests = "--ignore=tests/test_release.py" %}
-
-{% set deselect_tests = "--deselect=tests/test_barcode.py::test_barcode" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_codespell.py::test_codespell" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_flake8.py::test_flake8" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_cli_out" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_open2" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_memory.py::test_4125" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_color_count" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3050" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3854" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pylint.py::test_pylint" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_spikes.py::test_spikes" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_tesseract.py::test_tesseract" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_textextract.py::test_4180" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3058" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_textbox.py::test_textbox3" %}
-
 test:
   source_files:
     - tests
@@ -63,7 +61,7 @@ test:
     - pip
     - pytest
   commands:
-    - pip check 
+    - pip check
     - pytest -v tests {{ ignore_tests }} {{ deselect_tests }}
 
 about:
