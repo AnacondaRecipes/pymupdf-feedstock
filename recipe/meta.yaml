@@ -63,6 +63,8 @@ requirements:
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_flake8.py::test_flake8" %}
 # AssertionError: assert 'Linux' == 'Windows'
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_pylint.py::test_pylint" %}
+# upstream-known flaky tracemalloc leak test; self-skips on <3.13 and GitHub Actions, false positives in conda env
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_memory.py::test_4751" %}
 
 test:
   source_files:
