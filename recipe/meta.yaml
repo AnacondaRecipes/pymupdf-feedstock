@@ -8,6 +8,8 @@ package:
 source:
   url: https://github.com/{{ name }}/{{ name }}/archive/{{ version }}.tar.gz
   sha256: 23a64814bb9dce3088256c6bed981b03a163aa232a6f698180432b9a5990a891
+  patches:
+    - patches/0001-fix-python2-string-api-in-extra-i.patch
 
 build:
   number: 0
@@ -25,37 +27,55 @@ requirements:
     - setuptools
     # https://github.com/pymupdf/PyMuPDF/releases/tag/1.28.2
     - mupdf >=1.28.2
+    - pipcl
     - packaging
   run:
     - python
     - mupdf >=1.28.2
 
-# Missing module wdev
+# test_release.py imports repo-root setup.py + pipcl; not available in the test env
 {% set ignore_tests = "--ignore=tests/test_release.py" %}
+# depends on mupdf barcode third-party support in the system build
 {% set deselect_tests = "--deselect=tests/test_barcode.py::test_barcode" %}
+# no codespell in Anaconda environment
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_codespell.py::test_codespell" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_flake8.py::test_flake8" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_cli_out" %}
+# needs a git checkout (pipcl.git_items); test env has no .git
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_general.py::test_open2" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_memory.py::test_4125" %}
+# fails against system mupdf (needs PyMuPDF's custom config.h, per upstream)
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_color_count" %}
+# fails against system mupdf (needs mupdf's bundled third-party libs, per upstream)
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3050" %}
+# compares rendering to stored PNG; differs with system freetype/libs
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3854" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_pylint.py::test_pylint" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_spikes.py::test_spikes" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_tesseract.py::test_tesseract" %}
-{% set deselect_tests = deselect_tests + " --deselect=tests/test_textextract.py::test_4180" %}
+# CMYK handling depends on mupdf third-party color libs; fails with system mupdf
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_3058" %}
+# expects mupdf built WITH tesseract; Anaconda mupdf has no OCR support
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_tesseract.py::test_tesseract" %}
+# compares redaction render to stored PNG; differs with system freetype/libs
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_textextract.py::test_4180" %}
+# needs mupdf's embedded CJK font; fails with system mupdf build
 {% set deselect_tests = deselect_tests + " --deselect=tests/test_textbox.py::test_textbox3" %}
+# exact rms==0 pixel match tuned to Artifex's bundled mupdf, not our system build
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pixmap.py::test_5001" %}
+# expects empty mupdf warning buffer; our build emits a harmless font-table warning
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_font.py::test_5049" %}
+# $SRC_DIR/src/table.py' returned non-zero exit status 1
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_flake8.py::test_flake8" %}
+# AssertionError: assert 'Linux' == 'Windows'
+{% set deselect_tests = deselect_tests + " --deselect=tests/test_pylint.py::test_pylint" %}
+
 test:
   source_files:
     - tests
+    - docs/images
   imports:
-    #- fitz
+    - fitz
     - pymupdf
   requires:
     - pip
     - pytest
+    - pipcl
+    - psutil
   commands:
     - pip check
     - pytest -vv tests {{ ignore_tests }} {{ deselect_tests }}
